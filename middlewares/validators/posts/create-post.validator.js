@@ -2,8 +2,8 @@
 import Joi from "joi";
 
 export function createPostValidator(req, res, next) {
-    const courseData = req.body
-    const courseSchema = Joi.object({
+    const postBody = req.body
+    const postSchema = Joi.object({
       description: Joi.string().required().min(10),
       attachment_url: Joi.string().uri().required(),
       schedule_date: Joi.date().required(),
@@ -12,7 +12,8 @@ export function createPostValidator(req, res, next) {
       tags: Joi.array(),
       channel: Joi.string(),
     })
-    const {error} = courseSchema.validate(courseData)
+    const {error} = postSchema.validate(postBody)
+    console.log(error)
     if (error) {
       return res.status(400).json({ message: "Invalid data", error: error });
     }

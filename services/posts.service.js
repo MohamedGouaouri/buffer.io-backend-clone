@@ -1,4 +1,4 @@
-import { FACEBOOK_CHANNEL } from "./channels.service"
+import { FACEBOOK_CHANNEL } from "./channels.service.js"
 
 let lastPostId = 0
 
@@ -34,7 +34,7 @@ export function getPostsService(filters) {
 
     const posts = postsDB.filter((post) => {
         // Apply filters
-        const postIncluded = false
+        let postIncluded = false
         switch (filters.status) {
             case POST_STATUS_SENT:
                 postIncluded = post.sent_date != null

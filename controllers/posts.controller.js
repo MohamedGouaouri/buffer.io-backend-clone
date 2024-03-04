@@ -1,4 +1,4 @@
-import { createPostService, getPostsService } from "../services/posts.service";
+import { createPostService, getPostsService } from "../services/posts.service.js";
 
 export function getPostsController(filters) {
     // TODO: Validate filters

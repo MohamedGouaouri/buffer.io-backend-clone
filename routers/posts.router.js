@@ -1,12 +1,11 @@
 import express from "express";
-import { createPostService } from "../services/posts.service";
-import { createPostValidator } from "../middlewares/validators/posts/create-post.validator";
-import { createPostController, getPostsController } from "../controllers/posts.controller";
+import { createPostValidator } from "../middlewares/validators/posts/create-post.validator.js";
+import { createPostController, getPostsController } from "../controllers/posts.controller.js";
 
 const router = express.Router()
 
 // List all posts
-router.get('/posts', (req, res) => {
+router.get('/', (req, res) => {
     const filters = {
         status: req.query.status,
         start_date: req.query.start_date,
@@ -22,7 +21,7 @@ router.get('/posts', (req, res) => {
 })
 
 // Create a post
-router.post('/posts/create', createPostValidator,(req, res) => {
+router.post('/create', createPostValidator,(req, res) => {
     const data = req.body
     const createPostResponse = createPostController(data)
     if (createPostResponse.status == 'success') {
@@ -34,6 +33,9 @@ router.post('/posts/create', createPostValidator,(req, res) => {
 })
 
 // Update post schedule
-router.delete('/posts/:postId', (req, res) => {
+router.delete('/:postId', (req, res) => {
     // TODO: Implement delete
 })
+
+
+export default router
