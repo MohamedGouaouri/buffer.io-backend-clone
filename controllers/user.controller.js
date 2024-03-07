@@ -6,19 +6,24 @@ import {
 } from "../services/user.service.js";
 
 export const createUserController = async (req, res) => {
-  let { email, password, name } = req.body;
+  try {
+    let { email, password, name } = req.body;
 
-  // check if user already exists
-  let userExists = await checkIfUserExists(email);
+    // check if user already exists
+    let userExists = await checkIfUserExists(email);
 
-  if (!userExists) {
-    res.status(400).send("User already exist");
+    if (userExists) {
+      res.status(400).send("User already exist");
+    }
+    // hash the password
+    password = hashPassword(password);
+
+    // Create our user in the DB
+    let user = await createUser(email, password, name);
+    res.status(201).send(user);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
-  // hash the password
-  password = hashPassword(password);
-
-  // Create our user in the DB
-  let user = createUser(email, password, name);
 };
 
 export const signinUserController = async (req, res) => {

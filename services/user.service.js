@@ -1,25 +1,17 @@
+import { UserModel } from "../models/User.js";
+
 export const hashPassword = (password) => {
-  return "hashed password";
+  return password;
 };
 
 export const createUser = (email, password, name) => {
-  return {
-    success: true,
-    data: {
-      id: 1,
-      email,
-      password,
-      name,
-    },
-  };
+  // let user = new UserModel({ email, password, name });
+  // return user.save();
+  return UserModel.create({ email, password, name });
 };
 
 export const checkIfUserExists = (email) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 2000);
-  });
+  return UserModel.findOne({ email: email });
 };
 
 export const comparePassword = (password, hashedPassword) => {
