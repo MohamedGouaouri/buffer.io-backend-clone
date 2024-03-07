@@ -1,3 +1,5 @@
+import { PostModel } from "../models/Post.js"
+import { UserModel } from "../models/User.js"
 import { FACEBOOK_CHANNEL } from "./channels.service.js"
 
 let lastPostId = 0
@@ -19,56 +21,49 @@ export const POST_STATUS_SENT = 'sent'
 export const POST_STATUS_DRAFT = 'draft'
 export const POST_STATUS_SCHEDULED = 'scheduled'
 
-export function getPostsService(filters) {
+export function getPostsService(userId, filters) {
     /**
      * An example of a filter
      * filters: {
-     *  status: 'sent' | 'draft', 'scheduled',
+     *  status: 'SENT' | 'DRAFT', 'SCHEDULED',
      *  start_date: '',
      *  end_date: '',
      * }
      * 
      */
     // If no filter is applied than return everything
-    if (!filters.status && !filters.start_date && !filters.end_date) return postsDB;
-
-    const posts = postsDB.filter((post) => {
-        // Apply filters
-        let postIncluded = false
-        switch (filters.status) {
-            case POST_STATUS_SENT:
-                postIncluded = post.sent_date != null
-                break;
-            case POST_STATUS_SCHEDULED:
-                postIncluded = post.sent_date == null;
-                break;
-            case POST_STATUS_DRAFT:
-                postIncluded = post.is_draft
-                break;
-        }
-
-        if (filters.start_date && filters.end_date) {
-            const start_date = new Date(filters.start_date).getTime()
-            const end_date = new Date(filters.end_date).getTime()
-            const schedule_date = post.schedule_date.getTime()
-            if (schedule_date >= start_date && schedule_date <= end_date) {
-                postIncluded = true
-            }
-        }
-        return postIncluded
+    // TODO: Include start and end date filter
+    return PostModel.find({
+        user: userId,
+        status: filters.status
     })
-    console.log(posts)
-    return posts
 }
 
-export function createPostService(post) {
-    lastPostId++
-    postsDB.push({
-        ...post,
-        postId: lastPostId,
-        schedule_date: new Date(post.schedule_date) // Transform the date string to date object
-    })
-    return post
+export async function createPostService(userId, post) {
+    // Create post and link user to post
+    // Add post to the array of posts in the user document
+    try {
+        const createPost = await PostModel.create({
+            ...post,
+            user: userId
+        })
+        const user = await UserModel.findOneAndUpdate({
+            _id: userId
+        }, {
+            $push: {
+                posts: [createPost._id]
+            }
+        }, {
+            new: true, // return the updated document after update
+        })
+        console.log(user, post)
+        return {
+            user,
+            createPost,
+        }
+    } catch (error) {
+        throw error
+    }
 }
 
 export function deletePostService(postId) {

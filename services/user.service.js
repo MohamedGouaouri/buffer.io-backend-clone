@@ -1,7 +1,11 @@
 import { UserModel } from "../models/User.js";
+import bcrypt from 'bcrypt'
 
 export const hashPassword = (password) => {
-  return password;
+  // Generate a salt
+  const salt = bcrypt.genSaltSync(10)
+  const hashedPassword = bcrypt.hashSync(password, salt)
+  return hashedPassword;
 };
 
 export const createUser = (email, password, name) => {
@@ -15,5 +19,9 @@ export const checkIfUserExists = (email) => {
 };
 
 export const comparePassword = (password, hashedPassword) => {
-  return true;
+  return bcrypt.compareSync(password, hashedPassword)
 };
+
+export const generateToken = (data) => {
+  return data
+}

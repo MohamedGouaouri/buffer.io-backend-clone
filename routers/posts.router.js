@@ -11,18 +11,8 @@ const router = express.Router();
 router.get("/", getPostsController);
 
 // Create a post
-router.post("/create", createPostValidator, (req, res) => {
-  const data = req.body;
-  const createPostResponse = createPostController(data);
-  if (createPostResponse.status == "success") {
-    return res.status(201).json(createPostResponse);
-  }
-  return res.status(500).json({
-    message: "An unexpected error",
-  });
-});
+router.post("/create", createPostValidator, createPostController);
 
-// Update post schedule
 router.delete("/:postId", (req, res) => {
   // TODO: Implement delete
 });

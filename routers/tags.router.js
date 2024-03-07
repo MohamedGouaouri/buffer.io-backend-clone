@@ -13,8 +13,8 @@ router.post("/", TagRequestValidator, createTag);
 
 router.get("/", fetchTags);
 
-router.put("/", TagRequestValidator, updateTag);
+router.put("/:tagId", TagRequestValidator, updateTag);
 
-router.delete("/", deleteTag);
+router.delete("/:tagId", deleteTag);
 
 export default router;
