@@ -4,8 +4,8 @@ import {
   deleteTag,
   fetchTags,
   updateTag,
-} from "../controllers/tags.controller";
-import { TagRequestValidator } from "../middlewares/validators/tags/create-update-tag.validator";
+} from "../controllers/tags.controller.js";
+import { TagRequestValidator } from "../middlewares/validators/tags/create-update-tag.validator.js";
 
 const router = express.Router();
 

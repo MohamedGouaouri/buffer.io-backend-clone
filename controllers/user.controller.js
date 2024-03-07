@@ -3,7 +3,7 @@ import {
   comparePassword,
   createUser,
   hashPassword,
-} from "../services/user.service";
+} from "../services/user.service.js";
 
 export const createUserController = async (req, res) => {
   let { email, password, name } = req.body;
